@@ -7,9 +7,9 @@ namespace Required\Traduttore_Registry;
  *
  * @since 1.0.0
  *
- * @param string $type Project type. Either plugin or theme.
- * @param string $slug Project slug.
- * @param string $url  Full GlotPress API URL for the project.
+ * @param string $type    Project type. Either plugin or theme.
+ * @param string $slug    Project slug.
+ * @param string $api_url Full GlotPress API URL for the project.
  */
 function add_project( $type, $slug, $api_url ) {
     /**
@@ -17,33 +17,31 @@ function add_project( $type, $slug, $api_url ) {
      */
     add_filter( 'translations_api', function ( $result, $requested_type, $args ) use ( $type, $slug, $api_url ) {
 		if ( $type === $requested_type && $slug === $args['slug'] ) {
-			return get_translations( $args['slug'], $api_url );
+			return get_translations( $type, $args['slug'], $api_url );
 		}
 
 		return $result;
 	}, 10, 3 );
 
-    if ( 'plugin' === $type ) {
-        /**
-         * Filters the plugin translations transient to include the private plugins.
-         */
-        add_filter( 'site_transient_update_plugins', function ( $value ) use ( $type, $slug, $api_url ) {
-            if ( ! isset( $value->translations ) ) {
-                $value->translations = [];
-            }
+    /**
+     * Filters the translations transients to include the private plugin or theme.
+     */
+    add_filter( 'site_transient_update_' . $type . 's', function ( $value ) use ( $type, $slug, $api_url ) {
+        if ( ! isset( $value->translations ) ) {
+            $value->translations = [];
+        }
 
-            $translations = get_translations( $slug, $api_url );
+        $translations = get_translations( $type, $slug, $api_url );
 
-            foreach ( (array) $translations['translations'] as $translation ) {
-                $translation['type'] = $type;
-                $translation['slug'] = $slug;
+        foreach ( (array) $translations['translations'] as $translation ) {
+            $translation['type'] = $type;
+            $translation['slug'] = $slug;
 
-                $value->translations[] = $translation;
-            }
+            $value->translations[] = $translation;
+        }
 
-            return $value;
-        } );
-    }
+        return $value;
+    } );
 }
 
 /**
