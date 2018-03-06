@@ -27,6 +27,10 @@ function add_project( $type, $slug, $api_url ) {
 	 * Filters the translations transients to include the private plugin or theme.
 	 */
 	add_filter( 'site_transient_update_' . $type . 's', function ( $value ) use ( $type, $slug, $api_url ) {
+		if ( ! $value ) {
+			$value = (object) [];
+		}
+
 		if ( ! isset( $value->translations ) ) {
 			$value->translations = [];
 		}
@@ -34,8 +38,9 @@ function add_project( $type, $slug, $api_url ) {
 		$translations = get_translations( $type, $slug, $api_url );
 
 		foreach ( (array) $translations['translations'] as $translation ) {
-			$translation['type'] = $type;
-			$translation['slug'] = $slug;
+			$translation['type']    = $type;
+			$translation['slug']    = $slug;
+			$translation['version'] = $translation['version'] ?? '';
 
 			$value->translations[] = $translation;
 		}
