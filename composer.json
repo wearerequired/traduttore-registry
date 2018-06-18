@@ -1,33 +1,38 @@
 {
-    "name": "wearerequired/traduttore-registry",
-    "description": "Allows loading translation files from a custom GlotPress site running Traduttore",
-    "homepage": "https://github.com/wearerequired/traduttore-registry",
-    "license": "GPL-2.0-or-later",
-    "authors": [
-      {
-        "name": "required",
-        "email": "support@required.ch",
-        "homepage": "https://required.com",
-        "role": "Company"
-      },
-      {
-        "name": "Pascal Birchler",
-        "email": "pascal@required.ch",
-        "role": "Developer"
-      }
-    ],
-    "keywords": [
-      "wordpress",
-      "glotpress",
-      "translations"
-    ],
-    "autoload": {
-      "files": [
-        "inc/namespace.php"
-      ]
+  "name": "wearerequired/traduttore-registry",
+  "type": "library",
+  "description": "Allows loading translation files from a custom GlotPress site running Traduttore",
+  "homepage": "https://github.com/wearerequired/traduttore-registry",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "required",
+      "email": "support@required.ch",
+      "homepage": "https://required.com",
+      "role": "Company"
     },
-    "require": {
-      "php": ">=7.0"
+    {
+      "name": "Dominik Schilling",
+      "email": "dominik@required.ch",
+      "role": "Developer"
+    },
+    {
+      "name": "Pascal Birchler",
+      "email": "pascal@required.ch",
+      "role": "Developer"
     }
+  ],
+  "keywords": [
+    "wordpress",
+    "glotpress",
+    "translations"
+  ],
+  "autoload": {
+    "files": [
+      "inc/namespace.php"
+    ]
+  },
+  "require": {
+    "php": ">=7.0"
   }
-  
+}
