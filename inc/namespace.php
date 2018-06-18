@@ -2,6 +2,8 @@
 
 namespace Required\Traduttore_Registry;
 
+use \DateTime;
+
 /**
  * Adds a new project to load translations for.
  *
@@ -25,6 +27,8 @@ function add_project( $type, $slug, $api_url ) {
 
 	/**
 	 * Filters the translations transients to include the private plugin or theme.
+	 *
+	 * @see wp_get_translation_updates()
 	 */
 	add_filter( 'site_transient_update_' . $type . 's', function ( $value ) use ( $type, $slug, $api_url ) {
 		if ( ! $value ) {
@@ -35,12 +39,21 @@ function add_project( $type, $slug, $api_url ) {
 			$value->translations = [];
 		}
 
+		$installed_translations = wp_get_installed_translations( $type . 's' );
 		$translations = get_translations( $type, $slug, $api_url );
 
 		foreach ( (array) $translations['translations'] as $translation ) {
+			if ( isset( $installed_translations[ $slug ][ $translation['language'] ] ) && $translation['updated'] ) {
+				$local  = new DateTime( $installed_translations[ $slug ][ $translation['language'] ]['PO-Revision-Date'] );
+				$remote = new DateTime( $translation['updated'] );
+
+				if ( $local >= $remote ) {
+					continue;
+				}
+			}
+
 			$translation['type']    = $type;
 			$translation['slug']    = $slug;
-			$translation['version'] = $translation['version'] ?? '';
 
 			$value->translations[] = $translation;
 		}
