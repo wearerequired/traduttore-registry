@@ -27,12 +27,20 @@
     "glotpress",
     "translations"
   ],
+  "require": {
+    "php": ">=7.0"
+  },
+  "require-dev": {
+    "wp-coding-standards/wpcs": "dev-master",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4"
+  },
+  "scripts": {
+    "format": "phpcbf --standard=phpcs.xml.dist --report-summary --report-source",
+    "lint": "phpcs --standard=phpcs.xml.dist --report-summary --report-source"
+  },
   "autoload": {
     "files": [
       "inc/namespace.php"
     ]
-  },
-  "require": {
-    "php": ">=7.0"
   }
 }
