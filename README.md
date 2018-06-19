@@ -19,13 +19,13 @@ Here's an example of how you can use that function:
 ```php
 Required\Traduttore_Registry\add_project(
 	'plugin',
-	'acme-plugin',
-	'https://translate.acme.com/api/translations/acme/acme-plugin/'
+	'example-plugin',
+	'https://translate.example.com/api/translations/acme/acme-plugin/'
 );
 
 Required\Traduttore_Registry\add_project(
 	'theme',
-	'acme-theme',
-	'https://translate.acme.com/api/translations/acme/acme-theme/'
+	'example-theme',
+	'https://translate.example.com/api/translations/acme/acme-theme/'
 );
 ```
