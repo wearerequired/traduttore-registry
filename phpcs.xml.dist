@@ -12,6 +12,11 @@
 	<!-- Show progress and sniff codes in all reports -->
 	<arg value="ps"/>
 
+	<rule ref="WordPress-Core">
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+	</rule>
+
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 
