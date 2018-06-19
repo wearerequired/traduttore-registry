@@ -1,4 +1,11 @@
 <?php
+/**
+ * Main Traduttore Registry library.
+ *
+ * @since 1.0.0
+ *
+ * @package Required\Traduttore_Registry
+ */
 
 namespace Required\Traduttore_Registry;
 
