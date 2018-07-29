@@ -31,12 +31,12 @@
     "php": ">=7.0"
   },
   "require-dev": {
-    "wp-coding-standards/wpcs": "dev-master",
+    "wp-coding-standards/wpcs": "^1.0",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4"
   },
   "scripts": {
-    "format": "phpcbf --standard=phpcs.xml.dist --report-summary --report-source",
-    "lint": "phpcs --standard=phpcs.xml.dist --report-summary --report-source"
+    "format": "vendor/bin/phpcbf --standard=phpcs.xml.dist --report-summary --report-source",
+    "lint": "vendor/bin/phpcs --standard=phpcs.xml.dist --report-summary --report-source"
   },
   "autoload": {
     "files": [
