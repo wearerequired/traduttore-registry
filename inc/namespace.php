@@ -25,13 +25,16 @@ function add_project( $type, $slug, $api_url ) {
 	 * Short-circuits translations API requests for private projects.
 	 */
 	add_filter(
-		'translations_api', function ( $result, $requested_type, $args ) use ( $type, $slug, $api_url ) {
+		'translations_api',
+		function ( $result, $requested_type, $args ) use ( $type, $slug, $api_url ) {
 			if ( $type === $requested_type && $slug === $args['slug'] ) {
 				return get_translations( $type, $args['slug'], $api_url );
 			}
 
 			return $result;
-		}, 10, 3
+		},
+		10,
+		3
 	);
 
 	/**
@@ -40,7 +43,8 @@ function add_project( $type, $slug, $api_url ) {
 	 * @see wp_get_translation_updates()
 	 */
 	add_filter(
-		'site_transient_update_' . $type . 's', function ( $value ) use ( $type, $slug, $api_url ) {
+		'site_transient_update_' . $type . 's',
+		function ( $value ) use ( $type, $slug, $api_url ) {
 			if ( ! $value ) {
 				$value = (object) [];
 			}
