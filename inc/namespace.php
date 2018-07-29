@@ -56,6 +56,10 @@ function add_project( $type, $slug, $api_url ) {
 			$installed_translations = wp_get_installed_translations( $type . 's' );
 			$translations           = get_translations( $type, $slug, $api_url );
 
+			if ( ! isset( $translations['translations'] ) ) {
+				return $value;
+			}
+
 			foreach ( (array) $translations['translations'] as $translation ) {
 				if ( isset( $installed_translations[ $slug ][ $translation['language'] ] ) && $translation['updated'] ) {
 					$local  = new DateTime( $installed_translations[ $slug ][ $translation['language'] ]['PO-Revision-Date'] );
