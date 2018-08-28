@@ -27,7 +27,7 @@ function add_project( $type, $slug, $api_url ) {
 	add_filter(
 		'translations_api',
 		function ( $result, $requested_type, $args ) use ( $type, $slug, $api_url ) {
-			if ( $type === $requested_type && $slug === $args['slug'] ) {
+			if ( $type . 's' === $requested_type && $slug === $args['slug'] ) {
 				return get_translations( $type, $args['slug'], $api_url );
 			}
 
