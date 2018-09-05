@@ -1,3 +1,10 @@
 # Composer
 composer.lock
 vendor/
+
+# PHPCS
+phpcs.xml
+
+# PHPUnit
+phpunit.xml
+coverage.xml
