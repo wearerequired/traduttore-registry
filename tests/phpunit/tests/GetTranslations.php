@@ -18,12 +18,15 @@ class GetTranslations extends WP_UnitTestCase {
 		$api_url  = 'https://translate.required.com/api/translations/required/foo-plugin/';
 		$expected = [ 'foo' => 'bar' ];
 
-
 		add_filter(
 			'pre_http_request',
 			function ( $result, $args, $url ) use ( $api_url, $expected ) {
 				if ( $api_url === $url ) {
-					return [ 'headers' => [], 'body' => json_encode( $expected ), 'response' => [] ];
+					return [
+						'headers'  => [],
+						'body'     => json_encode( $expected ),
+						'response' => [],
+					];
 				}
 
 				return $result;
@@ -47,7 +50,11 @@ class GetTranslations extends WP_UnitTestCase {
 				remove_filter( 'pre_http_request', __FUNCTION__ );
 
 				if ( $api_url === $url ) {
-					return [ 'headers' => [], 'body' => json_encode( $expected ), 'response' => [] ];
+					return [
+						'headers'  => [],
+						'body'     => json_encode( $expected ),
+						'response' => [],
+					];
 				}
 
 				return $result;
