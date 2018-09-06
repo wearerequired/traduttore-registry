@@ -73,4 +73,36 @@ class GetTranslations extends WP_UnitTestCase {
 
 		self::assertNotFalse( get_site_transient( 'plugin_translations_bar-plugin' ) );
 	}
+
+	/**
+	 * Verifies that subsequent requests are served from cache.
+	 */
+	public function test_return_cached_data_on_subsequent_requests() {
+		$api_url  = 'https://translate.required.com/api/translations/required/bar-plugin/';
+		$expected = [ 'foo' => 'bar' ];
+
+		add_filter(
+			'pre_http_request',
+			function ( $result, $args, $url ) use ( $api_url, $expected ) {
+				remove_filter( 'pre_http_request', __FUNCTION__ );
+
+				if ( $api_url === $url ) {
+					return [
+						'headers'  => [],
+						'body'     => json_encode( $expected ),
+						'response' => [],
+					];
+				}
+
+				return $result;
+			},
+			10,
+			3
+		);
+
+		get_translations( 'plugin', 'bar-plugin', $api_url );
+		$actual = get_translations( 'plugin', 'fo-plugin', $api_url );
+
+		$this->assertSame( $expected, $actual );
+	}
 }
