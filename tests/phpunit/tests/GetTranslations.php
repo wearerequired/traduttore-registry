@@ -14,6 +14,9 @@ use function \Required\Traduttore_Registry\get_translations;
  *  Test cases for the get_translations() function.
  */
 class GetTranslations extends WP_UnitTestCase {
+	/**
+	 * Verifies that translation information is loaded from GlotPress.
+	 */
 	public function test_plugin_translations() {
 		$api_url  = 'https://translate.required.com/api/translations/required/foo-plugin/';
 		$expected = [ 'foo' => 'bar' ];
@@ -40,6 +43,9 @@ class GetTranslations extends WP_UnitTestCase {
 		$this->assertSame( $expected, $actual );
 	}
 
+	/**
+	 * Verifies that API results are cached in a transient.
+	 */
 	public function test_data_is_stored_in_transient() {
 		$api_url  = 'https://translate.required.com/api/translations/required/bar-plugin/';
 		$expected = [ 'foo' => 'bar' ];

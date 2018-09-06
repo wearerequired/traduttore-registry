@@ -14,6 +14,9 @@ use function \Required\Traduttore_Registry\add_project;
  *  Test cases for the add_project() function.
  */
 class AddProject extends WP_UnitTestCase {
+	/**
+	 * Verifies that calls to translation_api() are filtered.
+	 */
 	public function test_filter_translation_api() {
 		require_once ABSPATH . 'wp-admin/includes/translation-install.php';
 
