@@ -101,7 +101,7 @@ class GetTranslations extends WP_UnitTestCase {
 		);
 
 		get_translations( 'plugin', 'bar-plugin', $api_url );
-		$actual = get_translations( 'plugin', 'fo-plugin', $api_url );
+		$actual = get_translations( 'plugin', 'bar-plugin', $api_url );
 
 		$this->assertSame( $expected, $actual );
 	}
