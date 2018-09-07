@@ -30,17 +30,32 @@
   "require": {
     "php": ">=7.0"
   },
+  "config": {
+    "sort-packages": true
+  },
   "require-dev": {
-    "wp-coding-standards/wpcs": "^1.0",
-    "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4"
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+    "phpunit/phpunit": "^6.5.8",
+    "wp-coding-standards/wpcs": "^1.0"
   },
   "scripts": {
     "format": "vendor/bin/phpcbf --standard=phpcs.xml.dist --report-summary --report-source",
-    "lint": "vendor/bin/phpcs --standard=phpcs.xml.dist --report-summary --report-source"
+    "lint": "vendor/bin/phpcs --standard=phpcs.xml.dist --report-summary --report-source",
+    "test": "vendor/bin/phpunit"
   },
   "autoload": {
     "files": [
       "inc/namespace.php"
     ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Required\\Traduttore_Registry\\Tests\\": "tests/phpunit/tests"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
   }
 }
