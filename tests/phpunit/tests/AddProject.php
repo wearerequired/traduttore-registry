@@ -45,7 +45,12 @@ class AddProject extends WP_UnitTestCase {
 			3
 		);
 
-		$actual = translations_api( 'plugins', [ 'slug' => $slug, 'version' => '1.0' ] );
+		$actual = translations_api(
+			'plugins', [
+				'slug'    => $slug,
+				'version' => '1.0',
+			]
+		);
 
 		$this->assertSame( $expected, $actual );
 	}
@@ -75,7 +80,12 @@ class AddProject extends WP_UnitTestCase {
 			100
 		);
 
-		$actual = translations_api( 'plugins', [ 'slug' => 'bar-plugin', 'version' => '1.0' ] );
+		$actual = translations_api(
+			'plugins', [
+				'slug'    => 'bar-plugin',
+				'version' => '1.0',
+			]
+		);
 
 		$this->assertSame( $expected, $actual );
 	}
