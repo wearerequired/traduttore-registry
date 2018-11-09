@@ -101,7 +101,11 @@ function get_translations( $type, $slug, $url ) {
 		$res = json_decode( wp_remote_retrieve_body( wp_remote_get( $url, [ 'timeout' => 3 ] ) ), true );
 
 		if ( $res ) {
-			set_site_transient( $transient, $res, HOUR_IN_SECONDS * 12 );
+			$hours = 12;
+			if ( empty( $res['translations'] ) ) {
+				$hours = 1;
+			}
+			set_site_transient( $transient, $res, HOUR_IN_SECONDS * $hours );
 
 			return $res;
 		}
