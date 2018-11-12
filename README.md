@@ -15,6 +15,10 @@ composer require wearerequired/traduttore-registry
 
 After that, you can use `Required\Traduttore_Registry\add_project( $type, $slug, $api_url )` in your theme or plugin. On a multisite install, it's recommend to use it in a must-use plugin.
 
+`$type` can either be `plugin` or `theme`
+`$slug` must match the theme/plugin directory slug
+`$api_url` is the URL to the Traduttore project translation api
+
 ## Usage
 
 Here's an example of how you can use that function:
