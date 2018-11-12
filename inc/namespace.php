@@ -17,7 +17,7 @@ use \DateTime;
  * @since 1.0.0
  *
  * @param string $type    Project type. Either plugin or theme.
- * @param string $slug    Project slug.
+ * @param string $slug    Project directory slug.
  * @param string $api_url Full GlotPress API URL for the project.
  */
 function add_project( $type, $slug, $api_url ) {
@@ -87,7 +87,7 @@ function add_project( $type, $slug, $api_url ) {
  * @since 1.0.0
  *
  * @param string $type Project type. Either plugin or theme.
- * @param string $slug Project slug.
+ * @param string $slug Project directory slug.
  * @param string $url  Full GlotPress API URL for the project.
  *
  * @return array Translation data.
