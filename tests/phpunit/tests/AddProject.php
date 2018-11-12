@@ -46,7 +46,8 @@ class AddProject extends WP_UnitTestCase {
 		);
 
 		$actual = translations_api(
-			'plugins', [
+			'plugins',
+			[
 				'slug'    => $slug,
 				'version' => '1.0',
 			]
@@ -81,7 +82,8 @@ class AddProject extends WP_UnitTestCase {
 		);
 
 		$actual = translations_api(
-			'plugins', [
+			'plugins',
+			[
 				'slug'    => 'bar-plugin',
 				'version' => '1.0',
 			]
