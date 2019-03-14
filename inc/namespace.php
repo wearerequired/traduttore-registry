@@ -117,6 +117,19 @@ function delete_transients() {
  */
 function clear_translations( $type ) {
 	$transient_key = constant( __NAMESPACE__ . '\TRANSIENT_KEY_' . strtoupper( $type ) );
+	$translations  = get_site_transient( $transient_key );
+
+	if ( ! is_object( $translations ) ) {
+		return;
+	}
+
+	// Don't delete the cache if there are multiple requests.
+	$timeout          = 15;
+	$time_not_changed = isset( $translations->_last_checked ) && ( time() - $translations->_last_checked ) > $timeout;
+
+	if ( ! $time_not_changed ) {
+		return;
+	}
 
 	delete_site_transient( $transient_key );
 }
@@ -146,10 +159,10 @@ function get_translations( $type, $slug, $url ) {
 
 	$result = json_decode( wp_remote_retrieve_body( wp_remote_get( $url, [ 'timeout' => 2 ] ) ), true );
 	if ( is_array( $result ) ) {
-		$translations->{$slug} = $result;
+		$translations->{$slug}       = $result;
+		$translations->_last_checked = time();
 
-		set_site_transient( $transient_key, $translations, HOUR_IN_SECONDS * 12 );
-
+		set_site_transient( $transient_key, $translations );
 		return $result;
 	}
 
