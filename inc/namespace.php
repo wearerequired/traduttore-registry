@@ -25,7 +25,7 @@ const TRANSIENT_KEY_THEME  = 'traduttore-registry-themes';
  */
 function add_project( $type, $slug, $api_url ) {
 	if ( ! has_action( 'init', __NAMESPACE__ . '\delete_transients' ) ) {
-		add_action( 'init', __NAMESPACE__ . '\delete_transients' );
+		add_action( 'init', __NAMESPACE__ . '\delete_transients', 9999 );
 	}
 
 	/**
