@@ -24,6 +24,10 @@ const TRANSIENT_KEY_THEMES  = 'traduttore-registry-themes';
  * @param string $api_url Full GlotPress API URL for the project.
  */
 function add_project( $type, $slug, $api_url ) {
+	if ( ! has_action( 'init', __NAMESPACE__ . '\delete_transients' ) ) {
+		add_action( 'init', __NAMESPACE__ . '\delete_transients' );
+	}
+
 	/**
 	 * Short-circuits translations API requests for private projects.
 	 */
@@ -82,6 +86,39 @@ function add_project( $type, $slug, $api_url ) {
 			return $value;
 		}
 	);
+}
+
+/**
+ * Clears the transients for caching.
+ *
+ * @since 2.0.0
+ */
+function delete_transients() {
+	$clear_plugin_translations = function() {
+		clear_translations( 'plugin' );
+	};
+	$clear_theme_translations  = function() {
+		clear_translations( 'theme' );
+	};
+
+	add_action( 'set_site_transient_update_plugins', $clear_plugin_translations );
+	add_action( 'delete_site_transient_update_plugins', $clear_plugin_translations );
+
+	add_action( 'set_site_transient_update_themes', $clear_theme_translations );
+	add_action( 'delete_site_transient_update_themes', $clear_theme_translations );
+}
+
+/**
+ * Clears the translations for a given type.
+ *
+ * @since 2.0.0
+ *
+ * @param string $type Project type. Either plugin or theme.
+ */
+function clear_translations( $type ) {
+	$transient_key = constant( 'TRANSIENT_KEY_' . strtoupper( $type ) );
+
+	delete_site_transient( $transient_key );
 }
 
 /**
