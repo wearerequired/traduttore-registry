@@ -11,6 +11,9 @@ namespace Required\Traduttore_Registry;
 
 use \DateTime;
 
+const TRANSIENT_KEY_PLUGINS = 'traduttore-registry-plugins';
+const TRANSIENT_KEY_THEMES  = 'traduttore-registry-themes';
+
 /**
  * Adds a new project to load translations for.
  *
@@ -93,23 +96,26 @@ function add_project( $type, $slug, $api_url ) {
  * @return array Translation data.
  */
 function get_translations( $type, $slug, $url ) {
-	$transient = $type . '_translations_' . $slug;
+	$transient_key = constant( 'TRANSIENT_KEY_' . strtoupper( $type ) );
+	$translations  = get_site_transient( $transient_key );
 
-	$results = get_site_transient( $transient );
-
-	if ( false === $results ) {
-		$res = json_decode( wp_remote_retrieve_body( wp_remote_get( $url, [ 'timeout' => 3 ] ) ), true );
-
-		if ( $res ) {
-			$hours = 12;
-			if ( empty( $res['translations'] ) ) {
-				$hours = 1;
-			}
-			set_site_transient( $transient, $res, HOUR_IN_SECONDS * $hours );
-
-			return $res;
-		}
+	if ( ! is_object( $translations ) ) {
+		$translations = new \stdClass();
 	}
 
-	return $results;
+	if ( isset( $translations->{$slug} ) && is_array( $translations->{$slug} ) ) {
+		return $translations->{$slug};
+	}
+
+	$result = json_decode( wp_remote_retrieve_body( wp_remote_get( $url, [ 'timeout' => 2 ] ) ), true );
+	if ( is_array( $result ) ) {
+		$translations->{$slug} = $result;
+
+		set_site_transient( $transient_key, $translations, HOUR_IN_SECONDS * 12 );
+
+		return $result;
+	}
+
+	// Nothing found.
+	return [];
 }
