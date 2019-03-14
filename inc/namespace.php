@@ -11,8 +11,8 @@ namespace Required\Traduttore_Registry;
 
 use \DateTime;
 
-const TRANSIENT_KEY_PLUGINS = 'traduttore-registry-plugins';
-const TRANSIENT_KEY_THEMES  = 'traduttore-registry-themes';
+const TRANSIENT_KEY_PLUGIN = 'traduttore-registry-plugins';
+const TRANSIENT_KEY_THEME  = 'traduttore-registry-themes';
 
 /**
  * Adds a new project to load translations for.
@@ -116,7 +116,7 @@ function delete_transients() {
  * @param string $type Project type. Either plugin or theme.
  */
 function clear_translations( $type ) {
-	$transient_key = constant( 'TRANSIENT_KEY_' . strtoupper( $type ) );
+	$transient_key = constant( __NAMESPACE__ . '\TRANSIENT_KEY_' . strtoupper( $type ) );
 
 	delete_site_transient( $transient_key );
 }
@@ -133,7 +133,7 @@ function clear_translations( $type ) {
  * @return array Translation data.
  */
 function get_translations( $type, $slug, $url ) {
-	$transient_key = constant( 'TRANSIENT_KEY_' . strtoupper( $type ) );
+	$transient_key = constant( __NAMESPACE__ . '\TRANSIENT_KEY_' . strtoupper( $type ) );
 	$translations  = get_site_transient( $transient_key );
 
 	if ( ! is_object( $translations ) ) {
