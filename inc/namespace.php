@@ -24,8 +24,8 @@ const TRANSIENT_KEY_THEME  = 'traduttore-registry-themes';
  * @param string $api_url Full GlotPress API URL for the project.
  */
 function add_project( $type, $slug, $api_url ) {
-	if ( ! has_action( 'init', __NAMESPACE__ . '\delete_transients' ) ) {
-		add_action( 'init', __NAMESPACE__ . '\delete_transients', 9999 );
+	if ( ! has_action( 'init', __NAMESPACE__ . '\register_clean_translations_cache' ) ) {
+		add_action( 'init', __NAMESPACE__ . '\register_clean_translations_cache', 9999 );
 	}
 
 	/**
@@ -53,19 +53,20 @@ function add_project( $type, $slug, $api_url ) {
 		'site_transient_update_' . $type . 's',
 		function ( $value ) use ( $type, $slug, $api_url ) {
 			if ( ! $value ) {
-				$value = (object) [];
+				$value = new \stdClass();
 			}
 
 			if ( ! isset( $value->translations ) ) {
 				$value->translations = [];
 			}
 
-			$installed_translations = wp_get_installed_translations( $type . 's' );
-			$translations           = get_translations( $type, $slug, $api_url );
+			$translations = get_translations( $type, $slug, $api_url );
 
 			if ( ! isset( $translations['translations'] ) ) {
 				return $value;
 			}
+
+			$installed_translations = wp_get_installed_translations( $type . 's' );
 
 			foreach ( (array) $translations['translations'] as $translation ) {
 				if ( isset( $installed_translations[ $slug ][ $translation['language'] ] ) && $translation['updated'] ) {
@@ -89,16 +90,16 @@ function add_project( $type, $slug, $api_url ) {
 }
 
 /**
- * Clears the transients for caching.
+ * Registers actions for clearing translation caches.
  *
  * @since 2.0.0
  */
-function delete_transients() {
+function register_clean_translations_cache() {
 	$clear_plugin_translations = function() {
-		clear_translations( 'plugin' );
+		clean_translations_cache( 'plugin' );
 	};
 	$clear_theme_translations  = function() {
-		clear_translations( 'theme' );
+		clean_translations_cache( 'theme' );
 	};
 
 	add_action( 'set_site_transient_update_plugins', $clear_plugin_translations );
@@ -109,13 +110,13 @@ function delete_transients() {
 }
 
 /**
- * Clears the translations for a given type.
+ * Clears existing translation cache for a given type.
  *
  * @since 2.0.0
  *
  * @param string $type Project type. Either plugin or theme.
  */
-function clear_translations( $type ) {
+function clean_translations_cache( $type ) {
 	$transient_key = constant( __NAMESPACE__ . '\TRANSIENT_KEY_' . strtoupper( $type ) );
 	$translations  = get_site_transient( $transient_key );
 
