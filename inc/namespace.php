@@ -92,7 +92,7 @@ function add_project( $type, $slug, $api_url ) {
 /**
  * Registers actions for clearing translation caches.
  *
- * @since 2.0.0
+ * @since 1.1.0
  */
 function register_clean_translations_cache() {
 	$clear_plugin_translations = function() {
@@ -112,7 +112,7 @@ function register_clean_translations_cache() {
 /**
  * Clears existing translation cache for a given type.
  *
- * @since 2.0.0
+ * @since 1.1.0
  *
  * @param string $type Project type. Either plugin or theme.
  */
