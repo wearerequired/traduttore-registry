@@ -28,7 +28,7 @@
     "translations"
   ],
   "require": {
-    "php": ">=7.0"
+    "php": ">=7.1"
   },
   "config": {
     "sort-packages": true
