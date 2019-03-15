@@ -9,7 +9,7 @@
 
 namespace Required\Traduttore_Registry;
 
-use \DateTime;
+use DateTime;
 
 const TRANSIENT_KEY_PLUGIN = 'traduttore-registry-plugins';
 const TRANSIENT_KEY_THEME  = 'traduttore-registry-themes';
