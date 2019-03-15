@@ -124,9 +124,12 @@ function clean_translations_cache( $type ) {
 		return;
 	}
 
-	// Don't delete the cache if there are multiple requests.
-	$timeout          = 15;
-	$time_not_changed = isset( $translations->_last_checked ) && ( time() - $translations->_last_checked ) > $timeout;
+	/*
+	 * Don't delete the cache if the transient gets changed multiple times
+	 * during a single request. Set cache lifetime to maximum 15 seconds.
+	 */
+	$cache_lifespan   = 15;
+	$time_not_changed = isset( $translations->_last_checked ) && ( time() - $translations->_last_checked ) > $cache_lifespan;
 
 	if ( ! $time_not_changed ) {
 		return;
