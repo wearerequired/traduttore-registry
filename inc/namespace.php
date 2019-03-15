@@ -9,7 +9,7 @@
 
 namespace Required\Traduttore_Registry;
 
-use \DateTime;
+use DateTime;
 
 /**
  * Adds a new project to load translations for.
