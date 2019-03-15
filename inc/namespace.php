@@ -11,6 +11,9 @@ namespace Required\Traduttore_Registry;
 
 use \DateTime;
 
+const TRANSIENT_KEY_PLUGIN = 'traduttore-registry-plugins';
+const TRANSIENT_KEY_THEME  = 'traduttore-registry-themes';
+
 /**
  * Adds a new project to load translations for.
  *
@@ -21,6 +24,10 @@ use \DateTime;
  * @param string $api_url Full GlotPress API URL for the project.
  */
 function add_project( $type, $slug, $api_url ) {
+	if ( ! has_action( 'init', __NAMESPACE__ . '\register_clean_translations_cache' ) ) {
+		add_action( 'init', __NAMESPACE__ . '\register_clean_translations_cache', 9999 );
+	}
+
 	/**
 	 * Short-circuits translations API requests for private projects.
 	 */
@@ -46,19 +53,20 @@ function add_project( $type, $slug, $api_url ) {
 		'site_transient_update_' . $type . 's',
 		function ( $value ) use ( $type, $slug, $api_url ) {
 			if ( ! $value ) {
-				$value = (object) [];
+				$value = new \stdClass();
 			}
 
 			if ( ! isset( $value->translations ) ) {
 				$value->translations = [];
 			}
 
-			$installed_translations = wp_get_installed_translations( $type . 's' );
-			$translations           = get_translations( $type, $slug, $api_url );
+			$translations = get_translations( $type, $slug, $api_url );
 
 			if ( ! isset( $translations['translations'] ) ) {
 				return $value;
 			}
+
+			$installed_translations = wp_get_installed_translations( $type . 's' );
 
 			foreach ( (array) $translations['translations'] as $translation ) {
 				if ( isset( $installed_translations[ $slug ][ $translation['language'] ] ) && $translation['updated'] ) {
@@ -82,6 +90,55 @@ function add_project( $type, $slug, $api_url ) {
 }
 
 /**
+ * Registers actions for clearing translation caches.
+ *
+ * @since 1.1.0
+ */
+function register_clean_translations_cache() {
+	$clear_plugin_translations = function() {
+		clean_translations_cache( 'plugin' );
+	};
+	$clear_theme_translations  = function() {
+		clean_translations_cache( 'theme' );
+	};
+
+	add_action( 'set_site_transient_update_plugins', $clear_plugin_translations );
+	add_action( 'delete_site_transient_update_plugins', $clear_plugin_translations );
+
+	add_action( 'set_site_transient_update_themes', $clear_theme_translations );
+	add_action( 'delete_site_transient_update_themes', $clear_theme_translations );
+}
+
+/**
+ * Clears existing translation cache for a given type.
+ *
+ * @since 1.1.0
+ *
+ * @param string $type Project type. Either plugin or theme.
+ */
+function clean_translations_cache( $type ) {
+	$transient_key = constant( __NAMESPACE__ . '\TRANSIENT_KEY_' . strtoupper( $type ) );
+	$translations  = get_site_transient( $transient_key );
+
+	if ( ! is_object( $translations ) ) {
+		return;
+	}
+
+	/*
+	 * Don't delete the cache if the transient gets changed multiple times
+	 * during a single request. Set cache lifetime to maximum 15 seconds.
+	 */
+	$cache_lifespan   = 15;
+	$time_not_changed = isset( $translations->_last_checked ) && ( time() - $translations->_last_checked ) > $cache_lifespan;
+
+	if ( ! $time_not_changed ) {
+		return;
+	}
+
+	delete_site_transient( $transient_key );
+}
+
+/**
  * Gets the translations for a given project.
  *
  * @since 1.0.0
@@ -93,23 +150,26 @@ function add_project( $type, $slug, $api_url ) {
  * @return array Translation data.
  */
 function get_translations( $type, $slug, $url ) {
-	$transient = $type . '_translations_' . $slug;
+	$transient_key = constant( __NAMESPACE__ . '\TRANSIENT_KEY_' . strtoupper( $type ) );
+	$translations  = get_site_transient( $transient_key );
 
-	$results = get_site_transient( $transient );
-
-	if ( false === $results ) {
-		$res = json_decode( wp_remote_retrieve_body( wp_remote_get( $url, [ 'timeout' => 3 ] ) ), true );
-
-		if ( $res ) {
-			$hours = 12;
-			if ( empty( $res['translations'] ) ) {
-				$hours = 1;
-			}
-			set_site_transient( $transient, $res, HOUR_IN_SECONDS * $hours );
-
-			return $res;
-		}
+	if ( ! is_object( $translations ) ) {
+		$translations = new \stdClass();
 	}
 
-	return $results;
+	if ( isset( $translations->{$slug} ) && is_array( $translations->{$slug} ) ) {
+		return $translations->{$slug};
+	}
+
+	$result = json_decode( wp_remote_retrieve_body( wp_remote_get( $url, [ 'timeout' => 2 ] ) ), true );
+	if ( is_array( $result ) ) {
+		$translations->{$slug}       = $result;
+		$translations->_last_checked = time();
+
+		set_site_transient( $transient_key, $translations );
+		return $result;
+	}
+
+	// Nothing found.
+	return [];
 }

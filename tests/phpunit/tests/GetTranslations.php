@@ -8,6 +8,7 @@
 namespace Required\Traduttore_Registry\Tests;
 
 use \WP_UnitTestCase;
+use const Required\Traduttore_Registry\TRANSIENT_KEY_PLUGIN;
 use function \Required\Traduttore_Registry\get_translations;
 
 /**
@@ -71,7 +72,8 @@ class GetTranslations extends WP_UnitTestCase {
 
 		get_translations( 'plugin', 'bar-plugin', $api_url );
 
-		self::assertNotFalse( get_site_transient( 'plugin_translations_bar-plugin' ) );
+		$transient = get_site_transient( TRANSIENT_KEY_PLUGIN );
+		self::assertNotFalse( $transient->{'bar-plugin'} );
 	}
 
 	/**
