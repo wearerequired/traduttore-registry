@@ -1,7 +1,10 @@
 # Traduttore Registry
 
 
-[![Build Status](https://travis-ci.com/wearerequired/traduttore-registry.svg?branch=master)](https://travis-ci.com/wearerequired/traduttore-registry) [![codecov](https://codecov.io/gh/wearerequired/traduttore-registry/branch/master/graph/badge.svg)](https://codecov.io/gh/wearerequired/traduttore-registry)
+[![Build Status](https://travis-ci.com/wearerequired/traduttore-registry.svg?branch=master)](https://travis-ci.com/wearerequired/traduttore-registry)
+[![codecov](https://codecov.io/gh/wearerequired/traduttore-registry/branch/master/graph/badge.svg)](https://codecov.io/gh/wearerequired/traduttore-registry)
+[![Latest Stable Version](https://poser.pugx.org/wearerequired/traduttore-registry/v/stable)](https://packagist.org/packages/wearerequired/traduttore-registry)
+[![Latest Unstable Version](https://poser.pugx.org/wearerequired/traduttore-registry/v/unstable)](https://packagist.org/packages/wearerequired/traduttore-registry)
 
 Allows loading translation files from a custom GlotPress site running [Traduttore](https://github.com/wearerequired/traduttore).
 
