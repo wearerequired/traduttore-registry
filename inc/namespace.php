@@ -67,9 +67,18 @@ function add_project( $type, $slug, $api_url ) {
 			}
 
 			$installed_translations = wp_get_installed_translations( $type . 's' );
+			$locales                = array_values( get_available_languages() );
+
+			/** This filter is documented in wp-includes/update.php */
+			$locales        = apply_filters( $type . 's_update_check_locales', $locales );
+			$active_locales = array_unique( $locales );
 
 			foreach ( (array) $translations['translations'] as $translation ) {
-				if ( isset( $installed_translations[ $slug ][ $translation['language'] ] ) && $translation['updated'] ) {
+				if ( ! in_array( $translation['language'], $active_locales, true ) ) {
+					continue;
+				}
+
+				if ( $translation['updated'] && isset( $installed_translations[ $slug ][ $translation['language'] ] ) ) {
 					$local  = new DateTime( $installed_translations[ $slug ][ $translation['language'] ]['PO-Revision-Date'] );
 					$remote = new DateTime( $translation['updated'] );
 
