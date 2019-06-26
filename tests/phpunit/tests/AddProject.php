@@ -18,7 +18,7 @@ class AddProject extends WP_UnitTestCase {
 	/**
 	 * Verifies that calls to translation_api() are filtered.
 	 */
-	public function test_filter_translation_api() {
+	public function test_filter_translation_api(): void {
 		require_once ABSPATH . 'wp-admin/includes/translation-install.php';
 
 		$type     = 'plugin';
@@ -30,7 +30,7 @@ class AddProject extends WP_UnitTestCase {
 
 		add_filter(
 			'pre_http_request',
-			function ( $result, $args, $url ) use ( $api_url, $expected ) {
+			static function ( $result, $args, $url ) use ( $api_url, $expected ) {
 				if ( $api_url === $url ) {
 					return [
 						'headers'  => [],
@@ -59,7 +59,7 @@ class AddProject extends WP_UnitTestCase {
 	/**
 	 * Verifies that calls to translation_api() are filtered.
 	 */
-	public function test_do_not_filter_translation_api_for_other_projects() {
+	public function test_do_not_filter_translation_api_for_other_projects(): void {
 		require_once ABSPATH . 'wp-admin/includes/translation-install.php';
 
 		$type     = 'plugin';
@@ -71,7 +71,7 @@ class AddProject extends WP_UnitTestCase {
 
 		add_filter(
 			'translations_api',
-			function ( $result ) use ( $expected ) {
+			static function ( $result ) use ( $expected ) {
 				if ( false === $result ) {
 					return $expected;
 				}
@@ -95,7 +95,7 @@ class AddProject extends WP_UnitTestCase {
 	/**
 	 * Verifies that calls to wp_get_translation_updates() are filtered.
 	 */
-	public function test_get_translation_updates() {
+	public function test_get_translation_updates(): void {
 		$type    = 'plugin';
 		$slug    = 'internationalized-plugin'; // Part of the WordPress test suite.
 		$api_url = 'https://translate.required.com/api/translations/required/internationalized-plugin/';
@@ -125,7 +125,7 @@ class AddProject extends WP_UnitTestCase {
 
 		add_filter(
 			'pre_http_request',
-			function ( $result, $args, $url ) use ( $api_url, $body ) {
+			static function ( $result, $args, $url ) use ( $api_url, $body ) {
 				if ( $api_url === $url ) {
 					return [
 						'headers'  => [],
@@ -149,7 +149,7 @@ class AddProject extends WP_UnitTestCase {
 	 * Verifies that calls to wp_get_translation_updates() are not filtered
 	 * when the remote package is older than the local one.
 	 */
-	public function test_get_translation_updates_outdated_package() {
+	public function test_get_translation_updates_outdated_package(): void {
 		$type    = 'plugin';
 		$slug    = 'internationalized-plugin'; // Part of the WordPress test suite.
 		$api_url = 'https://translate.required.com/api/translations/required/internationalized-plugin/';
@@ -171,7 +171,7 @@ class AddProject extends WP_UnitTestCase {
 
 		add_filter(
 			'pre_http_request',
-			function ( $result, $args, $url ) use ( $api_url, $body ) {
+			static function ( $result, $args, $url ) use ( $api_url, $body ) {
 				if ( $api_url === $url ) {
 					return [
 						'headers'  => [],
@@ -195,7 +195,7 @@ class AddProject extends WP_UnitTestCase {
 	 * Verifies that calls to wp_get_translation_updates() are not filtered
 	 * when the API returns no translations.
 	 */
-	public function test_get_translation_updates_empty_api_result() {
+	public function test_get_translation_updates_empty_api_result(): void {
 		$type    = 'plugin';
 		$slug    = 'internationalized-plugin'; // Part of the WordPress test suite.
 		$api_url = 'https://translate.required.com/api/translations/required/internationalized-plugin/';
@@ -205,7 +205,7 @@ class AddProject extends WP_UnitTestCase {
 
 		add_filter(
 			'pre_http_request',
-			function ( $result, $args, $url ) use ( $api_url, $body ) {
+			static function ( $result, $args, $url ) use ( $api_url, $body ) {
 				if ( $api_url === $url ) {
 					return [
 						'headers'  => [],
