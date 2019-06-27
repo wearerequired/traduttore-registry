@@ -8,7 +8,7 @@
 		convertWarningsToExceptions="true"
 >
 	<testsuites>
-		<testsuite>
+		<testsuite name="traduttore-registry">
 			<directory suffix=".php">./tests/phpunit/tests</directory>
 		</testsuite>
 	</testsuites>

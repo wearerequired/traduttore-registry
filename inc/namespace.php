@@ -33,7 +33,7 @@ function add_project( $type, $slug, $api_url ) {
 	 */
 	add_filter(
 		'translations_api',
-		function ( $result, $requested_type, $args ) use ( $type, $slug, $api_url ) {
+		static function ( $result, $requested_type, $args ) use ( $type, $slug, $api_url ) {
 			if ( $type . 's' === $requested_type && $slug === $args['slug'] ) {
 				return get_translations( $type, $args['slug'], $api_url );
 			}
@@ -51,7 +51,7 @@ function add_project( $type, $slug, $api_url ) {
 	 */
 	add_filter(
 		'site_transient_update_' . $type . 's',
-		function ( $value ) use ( $type, $slug, $api_url ) {
+		static function ( $value ) use ( $type, $slug, $api_url ) {
 			if ( ! $value ) {
 				$value = new \stdClass();
 			}
@@ -67,9 +67,18 @@ function add_project( $type, $slug, $api_url ) {
 			}
 
 			$installed_translations = wp_get_installed_translations( $type . 's' );
+			$locales                = array_values( get_available_languages() );
+
+			/** This filter is documented in wp-includes/update.php */
+			$locales        = apply_filters( $type . 's_update_check_locales', $locales );
+			$active_locales = array_unique( $locales );
 
 			foreach ( (array) $translations['translations'] as $translation ) {
-				if ( isset( $installed_translations[ $slug ][ $translation['language'] ] ) && $translation['updated'] ) {
+				if ( ! in_array( $translation['language'], $active_locales, true ) ) {
+					continue;
+				}
+
+				if ( $translation['updated'] && isset( $installed_translations[ $slug ][ $translation['language'] ] ) ) {
 					$local  = new DateTime( $installed_translations[ $slug ][ $translation['language'] ]['PO-Revision-Date'] );
 					$remote = new DateTime( $translation['updated'] );
 
@@ -95,10 +104,10 @@ function add_project( $type, $slug, $api_url ) {
  * @since 1.1.0
  */
 function register_clean_translations_cache() {
-	$clear_plugin_translations = function() {
+	$clear_plugin_translations = static function() {
 		clean_translations_cache( 'plugin' );
 	};
-	$clear_theme_translations  = function() {
+	$clear_theme_translations  = static function() {
 		clean_translations_cache( 'theme' );
 	};
 

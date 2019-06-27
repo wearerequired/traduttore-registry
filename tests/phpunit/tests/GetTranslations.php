@@ -18,13 +18,13 @@ class GetTranslations extends WP_UnitTestCase {
 	/**
 	 * Verifies that translation information is loaded from GlotPress.
 	 */
-	public function test_plugin_translations() {
+	public function test_plugin_translations(): void {
 		$api_url  = 'https://translate.required.com/api/translations/required/foo-plugin/';
 		$expected = [ 'foo' => 'bar' ];
 
 		add_filter(
 			'pre_http_request',
-			function ( $result, $args, $url ) use ( $api_url, $expected ) {
+			static function ( $result, $args, $url ) use ( $api_url, $expected ) {
 				if ( $api_url === $url ) {
 					return [
 						'headers'  => [],
@@ -39,7 +39,7 @@ class GetTranslations extends WP_UnitTestCase {
 			3
 		);
 
-		$actual = get_translations( 'plugin', 'fo-plugin', $api_url );
+		$actual = get_translations( 'plugin', 'foo-plugin', $api_url );
 
 		$this->assertSame( $expected, $actual );
 	}
@@ -47,13 +47,13 @@ class GetTranslations extends WP_UnitTestCase {
 	/**
 	 * Verifies that API results are cached in a transient.
 	 */
-	public function test_data_is_stored_in_transient() {
+	public function test_data_is_stored_in_transient(): void {
 		$api_url  = 'https://translate.required.com/api/translations/required/bar-plugin/';
 		$expected = [ 'foo' => 'bar' ];
 
 		add_filter(
 			'pre_http_request',
-			function ( $result, $args, $url ) use ( $api_url, $expected ) {
+			static function ( $result, $args, $url ) use ( $api_url, $expected ) {
 				remove_filter( 'pre_http_request', __FUNCTION__ );
 
 				if ( $api_url === $url ) {
@@ -79,13 +79,13 @@ class GetTranslations extends WP_UnitTestCase {
 	/**
 	 * Verifies that subsequent requests are served from cache.
 	 */
-	public function test_return_cached_data_on_subsequent_requests() {
+	public function test_return_cached_data_on_subsequent_requests(): void {
 		$api_url  = 'https://translate.required.com/api/translations/required/bar-plugin/';
 		$expected = [ 'foo' => 'bar' ];
 
 		add_filter(
 			'pre_http_request',
-			function ( $result, $args, $url ) use ( $api_url, $expected ) {
+			static function ( $result, $args, $url ) use ( $api_url, $expected ) {
 				remove_filter( 'pre_http_request', __FUNCTION__ );
 
 				if ( $api_url === $url ) {
