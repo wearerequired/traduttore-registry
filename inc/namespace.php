@@ -79,7 +79,7 @@ function add_project( $type, $slug, $api_url ) {
 				}
 
 				if ( $translation['updated'] && isset( $installed_translations[ $slug ][ $translation['language'] ] ) ) {
-					$local  = new DateTime( $installed_translations[ $slug ][ $translation['language'] ]['PO-Revision-Date'] );
+					$local  = sanitize_date( $installed_translations[ $slug ][ $translation['language'] ]['PO-Revision-Date'] );
 					$remote = new DateTime( $translation['updated'] );
 
 					if ( $local >= $remote ) {
@@ -181,4 +181,31 @@ function get_translations( $type, $slug, $url ) {
 
 	// Nothing found.
 	return [];
+}
+
+/**
+ * Sanitizes a date string.
+ *
+ * DateTime fails to parse date strings that contain brackets, such as
+ * “Tue Dec 22 2015 12:52:19 GMT+0100 (West-Europa)”, which appears in
+ * PO-Revision-Date headers. Sanitization ensures such date headers are
+ * parsed correctly into DateTime objects.
+ *
+ * @since 2.1.0
+ *
+ * @param string $date_string
+ *
+ * @return \DateTime Date from string if parsable, otherwise the Unix epoch.
+ */
+function sanitize_date( $date_string ) {
+	$date_and_timezone = explode( '(', $date_string );
+	$date_no_timezone  = trim( $date_and_timezone[0] );
+
+	try {
+		$date = new DateTime( $date_no_timezone );
+	} catch (Exception $e ) {
+		return new DateTime( '1970-01-01' );
+	}
+
+	return $date;
 }
