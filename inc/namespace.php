@@ -191,7 +191,7 @@ function get_translations( $type, $slug, $url ) {
  *
  * @since 2.1.0
  *
- * @param string $date_string
+ * @param string $date_string The date string to sanitize.
  *
  * @return \DateTime Date from string if parsable, otherwise the Unix epoch.
  */
