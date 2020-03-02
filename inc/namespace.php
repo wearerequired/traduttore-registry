@@ -203,7 +203,7 @@ function sanitize_date( $date_string ) {
 
 	try {
 		$date = new DateTime( $date_no_timezone );
-	} catch (Exception $e ) {
+	} catch ( \Exception $e ) {
 		return new DateTime( '1970-01-01' );
 	}
 
