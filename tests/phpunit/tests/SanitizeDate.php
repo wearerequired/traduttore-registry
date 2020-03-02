@@ -16,8 +16,6 @@ use function \Required\Traduttore_Registry\sanitize_date;
  */
 class SanitizeDate extends WP_UnitTestCase {
 
-	private $result;
-
 	/**
 	 * Ensures good dates are unaltered.
 	 */
