@@ -81,9 +81,9 @@ class SanitizeDate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Data provider for `test_good_dates_are_unaltered`.
+	 * Data provider for `test_bad_dates`.
 	 *
-	 * @return array Dates that should be unaltered after sanitization.
+	 * @return array Date strings that DateTime will throw an Exception for.
 	 */
 	function bad_dates() {
 		return [
