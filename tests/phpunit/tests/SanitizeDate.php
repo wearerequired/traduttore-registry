@@ -43,7 +43,7 @@ class SanitizeDate extends WP_UnitTestCase {
 	 * @dataProvider bad_dates
 	 * @param string $date Unsanitized date string.
 	 */
-	public function test_bad_dates( $date ): void {
+	public function test_bad_dates_give_unix_epoch( $date ): void {
 		$epoch = new DateTime( '1970-01-01' );
 		$this->assertEquals( sanitize_date( $date ), $epoch );
 	}
@@ -81,7 +81,7 @@ class SanitizeDate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Data provider for `test_bad_dates`.
+	 * Data provider for `test_bad_dates_give_unix_epoch`.
 	 *
 	 * @return array Date strings that DateTime will throw an Exception for.
 	 */
