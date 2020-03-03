@@ -23,7 +23,7 @@ class SanitizeDate extends WP_UnitTestCase {
 	 * @param string $date Unsanitized date string.
 	 */
 	public function test_good_dates_are_unaltered( $date ): void {
-		$this->assertEquals( sanitize_date( $date ), new DateTime( $date ) );
+		$this->assertEquals( new DateTime( $date ), sanitize_date( $date ) );
 	}
 
 	/**
@@ -34,7 +34,7 @@ class SanitizeDate extends WP_UnitTestCase {
 	 * @param string $expected Expected result after sanitization.
 	 */
 	public function test_timezones_are_stripped( $date, $expected ): void {
-		$this->assertEquals( sanitize_date( $date ), new DateTime( $expected ) );
+		$this->assertEquals( new DateTime( $expected ), sanitize_date( $date ) );
 	}
 
 	/**
@@ -45,7 +45,7 @@ class SanitizeDate extends WP_UnitTestCase {
 	 */
 	public function test_bad_dates_give_unix_epoch( $date ): void {
 		$epoch = new DateTime( '1970-01-01' );
-		$this->assertEquals( sanitize_date( $date ), $epoch );
+		$this->assertEquals( $epoch, sanitize_date( $date ) );
 	}
 
 
