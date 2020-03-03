@@ -48,7 +48,6 @@ class SanitizeDate extends WP_UnitTestCase {
 		$this->assertEquals( $epoch, sanitize_date( $date ) );
 	}
 
-
 	/**
 	 * Data provider for `test_good_dates_are_unaltered`.
 	 *
