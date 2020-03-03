@@ -38,6 +38,18 @@ class SanitizeDate extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Ensures date strings DateTime cannot parse fall back to the Unix epoch.
+	 *
+	 * @dataProvider bad_dates
+	 * @param string $date Unsanitized date string.
+	 */
+	public function test_bad_dates( $date ): void {
+		$epoch = new DateTime( '1970-01-01' );
+		$this->assertEquals( sanitize_date( $date ), $epoch );
+	}
+
+
+	/**
 	 * Data provider for `test_good_dates_are_unaltered`.
 	 *
 	 * @return array Dates that should be unaltered after sanitization.
@@ -68,4 +80,17 @@ class SanitizeDate extends WP_UnitTestCase {
 		];
 	}
 
+	/**
+	 * Data provider for `test_good_dates_are_unaltered`.
+	 *
+	 * @return array Dates that should be unaltered after sanitization.
+	 */
+	function bad_dates() {
+		return [
+			['TBC'],
+			['123'],
+			['-'],
+			['The fifth of never.'],
+		];
+	}
 }
