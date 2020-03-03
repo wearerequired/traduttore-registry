@@ -187,7 +187,7 @@ function get_translations( $type, $slug, $url ) {
  * DateTime fails to parse date strings that contain brackets, such as
  * “Tue Dec 22 2015 12:52:19 GMT+0100 (West-Europa)”, which appears in
  * PO-Revision-Date headers. Sanitization ensures such date headers are
- * parsed correctly into DateTime objects.
+ * parsed correctly into DateTime instances.
  *
  * @since 2.1.0
  *

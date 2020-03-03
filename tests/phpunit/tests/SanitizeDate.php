@@ -12,7 +12,7 @@ use \WP_UnitTestCase;
 use function \Required\Traduttore_Registry\sanitize_date;
 
 /**
- *  Tests dates by the sanitize_date() function.
+ *  Tests dates are sanitized by the `sanitize_date()` function.
  */
 class SanitizeDate extends WP_UnitTestCase {
 
