@@ -4,7 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+* Prevent PHP fatal error for malformed date strings in PO files.
+
+### Changed
+* Only install updates for actually available languages.
+* Make closures static where possible.
+* Update PHPUnit to version 7.
+
 ## [2.0.0] - 2019-03-15
+
+### Fixed
+* Fix and improve various documentation.
+
 ### Changed
 * Delete cached API results when plugins/themes are updated to avoid stale or missing translation updates.
 
@@ -14,18 +28,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 * Support for PHP 7.0.
 
-### Fixed
-* Fix and improve various documentation.
-
 ## [1.0.2] - 2018-08-31
 
 ### Changed
-* Improves support for new `wp language plugin|theme install|update` commands in WP-CLI 2.0.
+* Improve support for new `wp language plugin|theme install|update` commands in WP-CLI 2.0.
 
 ## [1.0.1] - 2018-06-29
 
 ### Fixed
-* Prevents a PHP notice that could occur under some circumstances.
+* Prevent a PHP notice that could occur under some circumstances.
 
 ## 1.0.0 - 2018-06-19
 
