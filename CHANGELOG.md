@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.0.0] - 2019-03-15
 
 ### Fixed
-* Fix and improve various documentation.
+* Various documentation improvements.
 
 ### Changed
 * Delete cached API results when plugins/themes are updated to avoid stale or missing translation updates.
