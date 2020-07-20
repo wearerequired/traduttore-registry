@@ -18,7 +18,6 @@
     },
     {
       "name": "Pascal Birchler",
-      "email": "pascal@required.ch",
       "role": "Developer"
     }
   ],
@@ -55,7 +54,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "2.0-dev"
+      "dev-master": "2.x-dev"
     }
   }
 }
