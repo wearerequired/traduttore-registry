@@ -72,7 +72,7 @@ function add_project( $type, $slug, $api_url ) {
 			$active_locales = array_unique( $locales );
 
 			foreach ( (array) $translations['translations'] as $translation ) {
-				if ( ! in_array( $translation['language'], $active_locales, true ) ) {
+				if ( ! \in_array( $translation['language'], $active_locales, true ) ) {
 					continue;
 				}
 
@@ -127,7 +127,7 @@ function clean_translations_cache( $type ) {
 	$transient_key = constant( __NAMESPACE__ . '\TRANSIENT_KEY_' . strtoupper( $type ) );
 	$translations  = get_site_transient( $transient_key );
 
-	if ( ! is_object( $translations ) ) {
+	if ( ! \is_object( $translations ) ) {
 		return;
 	}
 
@@ -153,23 +153,22 @@ function clean_translations_cache( $type ) {
  * @param string $type Project type. Either plugin or theme.
  * @param string $slug Project directory slug.
  * @param string $url  Full GlotPress API URL for the project.
- *
  * @return array Translation data.
  */
 function get_translations( $type, $slug, $url ) {
 	$transient_key = constant( __NAMESPACE__ . '\TRANSIENT_KEY_' . strtoupper( $type ) );
 	$translations  = get_site_transient( $transient_key );
 
-	if ( ! is_object( $translations ) ) {
+	if ( ! \is_object( $translations ) ) {
 		$translations = new \stdClass();
 	}
 
-	if ( isset( $translations->{$slug} ) && is_array( $translations->{$slug} ) ) {
+	if ( isset( $translations->{$slug} ) && \is_array( $translations->{$slug} ) ) {
 		return $translations->{$slug};
 	}
 
 	$result = json_decode( wp_remote_retrieve_body( wp_remote_get( $url, [ 'timeout' => 2 ] ) ), true );
-	if ( is_array( $result ) ) {
+	if ( \is_array( $result ) ) {
 		$translations->{$slug}       = $result;
 		$translations->_last_checked = time();
 
@@ -192,7 +191,6 @@ function get_translations( $type, $slug, $url ) {
  * @since 2.1.0
  *
  * @param string $date_string The date string to sanitize.
- *
  * @return \DateTime Date from string if parsable, otherwise the Unix epoch.
  */
 function sanitize_date( $date_string ) {
