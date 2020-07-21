@@ -64,8 +64,8 @@ function add_project( $type, $slug, $api_url ) {
 				return $value;
 			}
 
-			$installed_translations = wp_get_installed_translations( $type . 's' );
-			$locales                = array_values( get_available_languages() );
+			$installed_translations = get_installed_translations( $type );
+			$locales                = get_available_locales();
 
 			/** This filter is documented in wp-includes/update.php */
 			$locales        = apply_filters( $type . 's_update_check_locales', $locales );
@@ -204,4 +204,47 @@ function sanitize_date( $date_string ) {
 	}
 
 	return $date;
+}
+
+/**
+ * Gets the installed translations.
+ *
+ * Results are cached.
+ *
+ * @since 2.2.0
+ *
+ * @see wp_get_installed_translations()
+ *
+ * @param string $type Project type. Either plugin or theme.
+ * @return array Translation data.
+ */
+function get_installed_translations( $type ) {
+	static $cache = [];
+
+	if ( ! isset( $cache[ $type ] ) ) {
+		$cache[ $type ] = wp_get_installed_translations( $type . 's' );
+	}
+
+	return $cache[ $type ];
+}
+
+/**
+ * Gets all available and installed locales.
+ *
+ * Results are cached.
+ *
+ * @since 2.2.0
+ *
+ * @see get_available_languages()
+ *
+ * @return array List of installed locales.
+ */
+function get_available_locales() {
+	static $cache = null;
+
+	if ( ! isset( $cache ) ) {
+		$cache = array_values( get_available_languages() );
+	}
+
+	return $cache;
 }
