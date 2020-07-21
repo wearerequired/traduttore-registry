@@ -26,6 +26,8 @@ class GetTranslations extends WP_UnitTestCase {
 			'pre_http_request',
 			static function ( $result, $args, $url ) use ( $api_url, $expected ) {
 				if ( $api_url === $url ) {
+					remove_filter( 'pre_http_request', __FUNCTION__ );
+
 					return [
 						'headers'  => [],
 						'body'     => json_encode( $expected ),
@@ -54,9 +56,9 @@ class GetTranslations extends WP_UnitTestCase {
 		add_filter(
 			'pre_http_request',
 			static function ( $result, $args, $url ) use ( $api_url, $expected ) {
-				remove_filter( 'pre_http_request', __FUNCTION__ );
-
 				if ( $api_url === $url ) {
+					remove_filter( 'pre_http_request', __FUNCTION__ );
+
 					return [
 						'headers'  => [],
 						'body'     => json_encode( $expected ),
@@ -80,15 +82,26 @@ class GetTranslations extends WP_UnitTestCase {
 	 * Verifies that subsequent requests are served from cache.
 	 */
 	public function test_return_cached_data_on_subsequent_requests(): void {
-		$api_url  = 'https://translate.required.com/api/translations/required/bar-plugin/';
-		$expected = [ 'foo' => 'bar' ];
+		$api_url       = 'https://translate.required.com/api/translations/required/bar-plugin/';
+		$expected      = [ 'foo' => 'bar' ];
+		$request_count = 0;
+
+		$request_counter = function( $result, $args, $url ) use ( $api_url, &$request_count ) {
+			if ( $api_url === $url ) {
+				$request_count++;
+			}
+
+			return $result;
+		};
+
+		add_filter( 'pre_http_request', $request_counter, 10, 3 );
 
 		add_filter(
 			'pre_http_request',
 			static function ( $result, $args, $url ) use ( $api_url, $expected ) {
-				remove_filter( 'pre_http_request', __FUNCTION__ );
-
 				if ( $api_url === $url ) {
+					remove_filter( 'pre_http_request', __FUNCTION__ );
+
 					return [
 						'headers'  => [],
 						'body'     => json_encode( $expected ),
@@ -105,6 +118,51 @@ class GetTranslations extends WP_UnitTestCase {
 		get_translations( 'plugin', 'bar-plugin', $api_url );
 		$actual = get_translations( 'plugin', 'bar-plugin', $api_url );
 
+		remove_filter( 'pre_http_request', $request_counter );
+
+		$this->assertSame( 1, $request_count );
+		$this->assertSame( $expected, $actual );
+	}
+
+	/**
+	 * Verifies that failed requests are served from cache.
+	 */
+	public function test_return_cached_data_on_request_after_previous_failure(): void {
+		$api_url       = 'https://translate.required.com/api/translations/required/bar-plugin/';
+		$expected      = [];
+		$request_count = 0;
+
+		$request_counter = function( $result, $args, $url ) use ( $api_url, &$request_count ) {
+			if ( $api_url === $url ) {
+				$request_count++;
+			}
+
+			return $result;
+		};
+
+		add_filter( 'pre_http_request', $request_counter, 10, 3 );
+
+		add_filter(
+			'pre_http_request',
+			static function ( $result, $args, $url ) use ( $api_url ) {
+				if ( $api_url === $url ) {
+					remove_filter( 'pre_http_request', __FUNCTION__ );
+
+					return new \WP_Error();
+				}
+
+				return $result;
+			},
+			10,
+			3
+		);
+
+		get_translations( 'plugin', 'bar-plugin', $api_url );
+		$actual = get_translations( 'plugin', 'bar-plugin', $api_url );
+
+		remove_filter( 'pre_http_request', $request_counter );
+
+		$this->assertSame( 1, $request_count );
 		$this->assertSame( $expected, $actual );
 	}
 }
