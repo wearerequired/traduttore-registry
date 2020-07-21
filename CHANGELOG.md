@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+* Call `wp_get_installed_translations()` and `get_available_languages()` only once to improve performance on plugins list table. [#39]
+* Cache results of failed API requests to reduce retries on follow-up requests which may fail too. [#40]
+
 ## [2.1.0] - 2020-07-20
 
 ### Fixed
@@ -55,3 +59,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#30]: https://github.com/wearerequired/traduttore-registry/issues/30
 [#32]: https://github.com/wearerequired/traduttore-registry/issues/32
 [#36]: https://github.com/wearerequired/traduttore-registry/issues/36
+[#39]: https://github.com/wearerequired/traduttore-registry/issues/39
+[#40]: https://github.com/wearerequired/traduttore-registry/issues/40
