@@ -168,16 +168,18 @@ function get_translations( $type, $slug, $url ) {
 	}
 
 	$result = json_decode( wp_remote_retrieve_body( wp_remote_get( $url, [ 'timeout' => 2 ] ) ), true );
-	if ( \is_array( $result ) ) {
-		$translations->{$slug}       = $result;
-		$translations->_last_checked = time();
-
-		set_site_transient( $transient_key, $translations );
-		return $result;
+	if ( ! \is_array( $result ) ) {
+		// Cache an empty result in case of a failure
+		// and retry on next update check.
+		$result = [];
 	}
 
-	// Nothing found.
-	return [];
+	$translations->{$slug}       = $result;
+	$translations->_last_checked = time();
+
+	set_site_transient( $transient_key, $translations );
+
+	return $result;
 }
 
 /**
