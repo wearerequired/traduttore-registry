@@ -1,7 +1,8 @@
 # Traduttore Registry
 
 
-[![Build Status](https://travis-ci.com/wearerequired/traduttore-registry.svg?branch=master)](https://travis-ci.com/wearerequired/traduttore-registry)
+![PHPUnit](https://github.com/wearerequired/traduttore-registry/workflows/PHPUnit/badge.svg)
+![Lint](https://github.com/wearerequired/traduttore-registry/workflows/Lint/badge.svg)
 [![codecov](https://codecov.io/gh/wearerequired/traduttore-registry/branch/master/graph/badge.svg)](https://codecov.io/gh/wearerequired/traduttore-registry)
 [![Latest Stable Version](https://poser.pugx.org/wearerequired/traduttore-registry/v/stable)](https://packagist.org/packages/wearerequired/traduttore-registry)
 [![Latest Unstable Version](https://poser.pugx.org/wearerequired/traduttore-registry/v/unstable)](https://packagist.org/packages/wearerequired/traduttore-registry)
@@ -43,3 +44,7 @@ Here's an example of how you can use that function:
 	'https://translate.example.com/api/translations/acme/acme-theme/'
 );
 ```
+
+<br>
+
+[![a required open source product - let's get in touch](https://media.required.com/images/open-source-banner.png)](https://required.com/en/lets-get-in-touch/)
