@@ -47,37 +47,18 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
-      - name: Set PHP_COVERAGE
-        run: |
-          if [ ${{ matrix.coverage }} == 'true' ]; then
-            echo "PHP_COVERAGE=xdebug" >> $GITHUB_ENV
-          else
-            echo "PHP_COVERAGE=none" >> $GITHUB_ENV
-          fi
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: ${{ env.PHP_COVERAGE }}
+          coverage: ${{ matrix.coverage && 'xdebug' || 'none' }}
           tools: composer
 
-      - name: Get Composer cache directory
-        id: composer-cache
-        run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Install PHP dependencies
+        uses: ramsey/composer-install@v2
 
-      - name: Cache PHP dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
-      - name: Install dependencies
+      - name: Make Composer packages available globally
         run: |
-          composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
           echo "${PWD}/vendor/bin" >> $GITHUB_PATH
           echo "WP_CLI_BIN_DIR=${PWD}/vendor/bin" >> $GITHUB_ENV
 
