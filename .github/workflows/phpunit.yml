@@ -5,10 +5,13 @@ on:
     branches:
       - master
   pull_request:
+  # Once a month at 04:00 on day-of-month 1.
+  schedule:
+    - cron: '0 0 1 * *'
 
 jobs:
   phpunit:
-    name: PHPUnit (PHP ${{ matrix.php }}, WordPress ${{ matrix.wordpress }}, GlotPress ${{ matrix.glotpress }})
+    name: PHPUnit${{ matrix.coverage && ' with coverage' || '' }} (PHP ${{ matrix.php }}, WordPress ${{ matrix.wordpress }}, GlotPress ${{ matrix.glotpress }})
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     services:
