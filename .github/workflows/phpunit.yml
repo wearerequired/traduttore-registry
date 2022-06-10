@@ -28,9 +28,9 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        php: [ '7.4', '7.3', '7.2', '7.1' ]
+        php: [ '7.4', '7.3', '7.2' ]
         wordpress: [ 'latest', 'nightly' ]
-        glotpress: [ 'latest', 'develop' ]
+        glotpress: [ 'latest' ]
         experimental: [ false ]
         include:
         # - php: '8.0'
@@ -42,6 +42,23 @@ jobs:
             glotpress: 'latest'
             experimental: false
             coverage: true
+            # GlotPress 2.3.1 is the latest version supporting PHP 7.1.
+          - os: ubuntu-latest
+            php: '7.1'
+            wordpress: 'latest'
+            glotpress: '2.3.1'
+            experimental: false
+            # GlotPress 4.0 requires PHP 7.4
+          - os: ubuntu-latest
+            php: '7.4'
+            wordpress: 'latest'
+            glotpress: 'develop'
+            experimental: false
+          - os: ubuntu-latest
+            php: '7.4'
+            wordpress: 'nightly'
+            glotpress: 'develop'
+            experimental: false
 
     steps:
       - name: Check out Git repository
